@@ -11,11 +11,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
-from os import chdir,getcwd 
+from os import chdir,getcwd,remove 
 import time
 import re
 import json
-
+from pathlib import Path
 
 #####################################################FIND GENE ID#########################"
 
@@ -297,6 +297,14 @@ def findSGRNA(seq, driver):
     path = getcwd(); 
     path = path + '\\tmp' ;
     print (path);
+    
+    
+
+    path2 = getcwd();
+    path2 = path2 + '\\tmp' ;
+    my_file = Path(path2+'\CRISPRdirect.json')
+    if my_file.is_file():
+        remove(path2+'\CRISPRdirect.json')
     
     chrome_options = webdriver.ChromeOptions()
     prefs = {'download.default_directory' : path }
