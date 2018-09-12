@@ -113,32 +113,34 @@ def findCDS(gene_id, driver):
     #Permet de récupérer les positions de début et fin du CDS
     #On a par exemple CDS 55..1870 , on veut que begin=55 et end=1870
     driver.get("https://www.ncbi.nlm.nih.gov/nuccore/66016960")
-    print("aaaaa")
     genbankID=driver.find_element_by_xpath("//p[contains(@class,'itemid')]").text
-    print(genbankID)
+    #print(genbankID)
     
     motif = re.compile(r'(?<=GenBank: )([A-Za-z]|[0-9]|.)+')
     geneID = motif.search(genbankID)
     geneID = geneID.group(0)
-    print (geneID)
+    #print (geneID)
     cdsID="feature_"+geneID+"_CDS_0"
-    print(cdsID)
+    #print(cdsID)
     
     
-    WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'..')]/following-sibling::span/following-sibling::span"))
-#            EC.presence_of_element_located(By.XPATH, "//span[contains(@id,'%s')]/following-sibling::span/following-sibling::span" %cdsID)
-    )   
+
+    time.sleep(5)
+    positions=driver.find_element_by_xpath("//span[@id='%s']" %cdsID).text
     
-    positions=driver.find_element_by_xpath("//span[contains(text(),'..')]/following-sibling::span/following-sibling::span").text
-    #positions=driver.find_element_by_xpath("//span[contains(@id,'%s')]/following-sibling::span/following-sibling::span" %cdsID).text
-    
-    print("positions : "+positions)
+    #print(positions)
     motif = re.compile(r'((\d+)\.\.(\d+))', re.IGNORECASE)
-    res = motif.findall(positions)
-#    print("res : "+res)
-    debut=res[0][1]
-    fin=res[0][2]    
+    res = motif.search(positions)
+    res = res.group(0)
+    #print("res : "+res)
+    debutmotif = re.compile(r'(([0-9]+)(?=.))')
+    finmotif = re.compile(r'((?<=..)[0-9]+)')
+    debut= debutmotif.search(res)
+    fin= finmotif.search(res)
+    debut= debut.group(0)
+    fin= fin.group(0)
+    #print(debut)
+    #print(fin)  
     dropdown = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.ID, "EntrezSystem2.PEntrez.Nuccore.Sequence_ResultsPanel.Sequence_SingleItemSupl.Sequence_ViewerGenbankSidePanel.Sequence_ViewerChangeRegion.Shutter"))
     )
@@ -374,9 +376,11 @@ def isTextsNotEmpty(*args):
 
 
 
+
 #URL = 'https://www.ncbi.nlm.nih.gov/nucleotide/HQ323264.1?report=genbank&log$=nuclalign&blast_rank=2&RID=TJ8TKU0M015'
 #regle = re.compile(r'((?<=nucleotide/)(\w+)(?=.))')
 #geneID = regle.search(URL)
 #print (geneID)
 #geneID = geneID.group(0)
 #print (geneID)
+
