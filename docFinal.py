@@ -99,12 +99,13 @@ def findCDS(gene_id, driver):
     #Permet de récupérer les positions de début et fin du CDS
     #On a par exemple CDS 55..1870 , on veut que begin=55 et end=1870
     driver.get("https://www.ncbi.nlm.nih.gov/nuccore/66016960")
+    print("aaaaa")
+    genbankID=driver.find_element_by_xpath("//p[contains(@class,'itemid')]").text
+    print(genbankID)
     
-    genbankID=driver.find_element_by_class("itemid").text
-    
-    motif = re.compile(r'(?<=GenBank: )([A-Za-z]|[0-9])+')
+    motif = re.compile(r'(?<=GenBank: )([A-Za-z]|[0-9]|.)+')
     geneID = motif.search(genbankID)
-    geneID = gene_id.group(0)
+    geneID = geneID.group(0)
     print (geneID)
     cdsID="feature_"+geneID+"_CDS_0"
     print(cdsID)
@@ -112,11 +113,11 @@ def findCDS(gene_id, driver):
     
     WebDriverWait(driver, 5).until(
             #EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'..')]/following-sibling::span/following-sibling::span"))
-            EC.presence_of_element_located(By.XPATH, "//span[contains(@id,'%s')]" %cdsID)
+            EC.presence_of_element_located(By.XPATH, "//span[contains(@id,'%s')]/following-sibling::span/following-sibling::span" %cdsID)
     )   
     
     #positions=driver.find_element_by_xpath("//span[contains(text(),'..')]/following-sibling::span/following-sibling::span").text
-    positions=driver.find_element_by_xpath("//span[contains(@id,'%s')]" %cdsID).text
+    positions=driver.find_element_by_xpath("//span[contains(@id,'%s')]/following-sibling::span/following-sibling::span" %cdsID).text
     
     print("positions : "+positions)
     motif = re.compile(r'((\d+)\.\.(\d+))', re.IGNORECASE)
@@ -356,4 +357,3 @@ def isTextsNotEmpty(*args):
         if not arg:
             result=False
     return result
-    
