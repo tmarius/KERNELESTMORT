@@ -1,7 +1,8 @@
 import time
 import json
-from os import chdir,getcwd,remove 
+from os import chdir,getcwd,remove
 import toExcel
+from pathlib import Path
 
 def reverse(chaineantisens):
     chainesens = ""#chaine inversée
@@ -106,6 +107,11 @@ def leMeilleur(sgnra1,sgnra2):
 def RetrouveBestSgrna(sens,antisens):
     results = loadFile()
     meilleur = InitSelectionSgrna(results)
+    path = getcwd();     
+    
+    if (path+'\CRISPRdirect.json').exists():
+        remove(path+'\CRISPRdirect.json') 
+    
     for sgrna in results: 
         if not (sgrna['hit_12mer'] == '0' or sgrna['hit_20mer'] == '0' or sgrna['tm'] < '65.00'):
             if (leMeilleur(meilleur[1],sgrna)==2):
@@ -139,16 +145,15 @@ def traitement(meilleur, sens, antisens):
     for sgrna in meilleur:  
 #        stringlistsgrnacomps=[]
         if(sgrna['strand'] == '-'):
-            
             seq = (reverse(sgrna['sequence']))
             sgrna['sequence']=seq
-        else :  
+        else : 
             seq = sgrna['sequence'] 
-            
-        seq_comp =  complementaire(sgrna['sequence'])
-        
+
         seq = "5'-"+sens+ seq +"-3'"
         sgrna['sequence'] = seq
+
+        seq_comp =  complementaire(sgrna['sequence']) 
         seq_comp =  reverse(seq_comp)   
         seq_comp = "5'-"+antisens+ seq_comp +"-3'"
         sgrna['start'] = seq_comp
@@ -158,6 +163,7 @@ def traitement(meilleur, sens, antisens):
     path = path + '\\tmp' ;
     remove(path+'\CRISPRdirect.json')    
 
+ 
     
         
 #        else:
