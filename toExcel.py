@@ -1,7 +1,7 @@
 import xlrd
 from xlwt import Workbook
 
-def createExcel (espece, gene, meilleur):
+def createExcel (espece, gene, meilleur,CDS):
     # choix du chemin
     #path = r"C:\chemin\vers\fichier.xls"
     
@@ -20,12 +20,14 @@ def createExcel (espece, gene, meilleur):
     feuil1.col(1).width = 5000
     feuil1.write(0,2,'sgRNA') #ecrit dans la feuille 1 en ligne 0, col 2
     feuil1.col(2).width = 10000
-    feuil1.write(0,3,'hit_20mer') #ecrit dans la feuille 1 en ligne 0, col 3
+    feuil1.write(0,3,'Nombre d appariement sur 20 bases') #ecrit dans la feuille 1 en ligne 0, col 3
     feuil1.col(3).width = 5000
-    feuil1.write(0,4,'hit_12mer') #ecrit dans la feuille 1 en ligne 0, col 3
+    feuil1.write(0,4,'Nombre d appariement sur 12 bases') #ecrit dans la feuille 1 en ligne 0, col 3
     feuil1.col(4).width = 5000
-    feuil1.write(0,5,'tm') #ecrit dans la feuille 1 en ligne 0, col 3
+    feuil1.write(0,5,'TM') #ecrit dans la feuille 1 en ligne 0, col 3
     feuil1.col(5).width = 5000
+    feuil1.write(0,6,'CDS') #ecrit dans la feuille 1 en ligne 0, col 3
+    feuil1.col(6).width = 5000
 
     # ajout des valeurs dans la ligne suivante
     ligne = feuil1.row(1) #ligne 1
@@ -34,6 +36,7 @@ def createExcel (espece, gene, meilleur):
     ligne.write(3,meilleur[0]['hit_20mer'])
     ligne.write(4,meilleur[0]['hit_12mer'])
     ligne.write(5,meilleur[0]['tm'])
+    ligne.write(6,CDS)
   
     ligne = feuil1.row(4) #ligne 1
     ligne.write(3,meilleur[1]['hit_20mer'])
@@ -66,4 +69,6 @@ def createExcel (espece, gene, meilleur):
 
 #hit_20mer,tm,hit_12mer,meilleur = 'NOPE'
 #createExcel(espece, gene, liste, hit_20mer, tm, hit_12mer,test)
+
+
 

@@ -112,17 +112,17 @@ def findCDS(gene_id, driver):
     
     
     WebDriverWait(driver, 5).until(
-            #EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'..')]/following-sibling::span/following-sibling::span"))
-            EC.presence_of_element_located(By.XPATH, "//span[contains(@id,'%s')]/following-sibling::span/following-sibling::span" %cdsID)
+            EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'..')]/following-sibling::span/following-sibling::span"))
+#            EC.presence_of_element_located(By.XPATH, "//span[contains(@id,'%s')]/following-sibling::span/following-sibling::span" %cdsID)
     )   
     
-    #positions=driver.find_element_by_xpath("//span[contains(text(),'..')]/following-sibling::span/following-sibling::span").text
-    positions=driver.find_element_by_xpath("//span[contains(@id,'%s')]/following-sibling::span/following-sibling::span" %cdsID).text
+    positions=driver.find_element_by_xpath("//span[contains(text(),'..')]/following-sibling::span/following-sibling::span").text
+    #positions=driver.find_element_by_xpath("//span[contains(@id,'%s')]/following-sibling::span/following-sibling::span" %cdsID).text
     
     print("positions : "+positions)
     motif = re.compile(r'((\d+)\.\.(\d+))', re.IGNORECASE)
     res = motif.findall(positions)
-    print("res : "+res)
+#    print("res : "+res)
     debut=res[0][1]
     fin=res[0][2]    
     dropdown = WebDriverWait(driver, 5).until(
@@ -258,6 +258,7 @@ def rechSgRNAGeneId(espece,gene, driver):
     CDS = findCDS(gene_id, driver)
     CDSmoit = moitieCDS(CDS, driver)
     findSGRNA(CDSmoit, driver)
+    return(CDS)
     
 def rechBoitPromSeq(espece,seq, driver):
     gene_id = searchByNameId(espece,seq, driver)

@@ -121,17 +121,17 @@ class Ui_Dialog(object):
         if(choiceBox==True):
             if(docFinal.isTextsNotEmpty(speciesName, nameID, sens, antisens)):
                 print("On fait les manip nécessaires pour la recherche sgRNA")
-                docFinal.rechSgRNAGeneId(speciesName,nameID, driver)
+                CDS = docFinal.rechSgRNAGeneId(speciesName,nameID, driver)
                 sgrna = crisprPrototype1.RetrouveBestSgrna(sens,antisens)
-                toExcel.createExcel(speciesName, nameID, sgrna)
+                toExcel.createExcel(speciesName, nameID, sgrna,CDS)
                 
                 
                 
             
             elif docFinal.isTextsNotEmpty(speciesName, partialSeq, sens, antisens):
-                docFinal.rechSgRNASeq(speciesName, partialSeq, driver)
+                CDS = docFinal.rechSgRNASeq(speciesName, partialSeq, driver)
                 sgrna = crisprPrototype1.RetrouveBestSgrna(sens,antisens)
-                toExcel.createExcel(speciesName, nameID, sgrna)
+                toExcel.createExcel(speciesName, nameID, sgrna,CDS)
                 
             else:
                 print("ERREUR - Pour la recherche de sgRNA, veuillez entrer une espèce, un id, une séquence, et deux brins 5' 3'")

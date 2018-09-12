@@ -139,15 +139,16 @@ def traitement(meilleur, sens, antisens):
     for sgrna in meilleur:  
 #        stringlistsgrnacomps=[]
         if(sgrna['strand'] == '-'):
+            
             seq = (reverse(sgrna['sequence']))
             sgrna['sequence']=seq
-        else : 
+        else :  
             seq = sgrna['sequence'] 
-
+            
+        seq_comp =  complementaire(sgrna['sequence'])
+        
         seq = "5'-"+sens+ seq +"-3'"
         sgrna['sequence'] = seq
-
-        seq_comp =  complementaire(sgrna['sequence']) 
         seq_comp =  reverse(seq_comp)   
         seq_comp = "5'-"+antisens+ seq_comp +"-3'"
         sgrna['start'] = seq_comp
