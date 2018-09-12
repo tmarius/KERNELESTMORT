@@ -70,14 +70,28 @@ def searchBySeq(espece, seq, driver):
             time.sleep(60)
             driver.switch_to_window(driver.window_handles[1])
             chaine_id = driver.find_element_by_xpath("//p[contains(@class,'itemid')]").text
+            #chaine_id = driver.find_elements_by_xpath("//*[@id='ui-ncbiexternallink-10']").text
+            #chaine_id = driver.current_url
+#            regle = re.compile(r'((?<=/)(([A-Z][0-9])+)(?=.))')
+#            print(regle)
+#            res=regle.search(chaine_id)
+#            print(res)
+#            res = res.group(0)
+
+            
             break
         except IndexError:
             i=i+1
             print(i)
-
-    motif = re.compile(r'(?<=GenBank: )([A-Za-z]|[0-9])+')
-    gene_id = motif.search(chaine_id)
+            
+    chaine_id = driver.current_url
+    regle = re.compile(r'((?<=nucleotide/)(\w+)(?=.))')
+    gene_id = regle.search(chaine_id)
     gene_id = gene_id.group(0)
+#    motif = re.compile(r'(?<=GenBank: )([A-Za-z]|[0-9])+')
+#    gene_id = motif.search(chaine_id)
+#    gene_id = gene_id.group(0)
+            
     return (gene_id)
 
 
@@ -352,7 +366,6 @@ def findSGRNA(seq, driver):
 
 
 
-
 #Si au moins une chaine de caractère passée est vide, retourne false. Sinon, retourne true
 def isTextsNotEmpty(*args):
     result=True
@@ -360,3 +373,14 @@ def isTextsNotEmpty(*args):
         if not arg:
             result=False
     return result
+
+
+
+
+#URL = 'https://www.ncbi.nlm.nih.gov/nucleotide/HQ323264.1?report=genbank&log$=nuclalign&blast_rank=2&RID=TJ8TKU0M015'
+#regle = re.compile(r'((?<=nucleotide/)(\w+)(?=.))')
+#geneID = regle.search(URL)
+#print (geneID)
+#geneID = geneID.group(0)
+#print (geneID)
+
