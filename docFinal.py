@@ -111,20 +111,23 @@ def findCDS(gene_id, driver):
     print(cdsID)
     
     
-    WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'..')]/following-sibling::span/following-sibling::span"))
-#            EC.presence_of_element_located(By.XPATH, "//span[contains(@id,'%s')]/following-sibling::span/following-sibling::span" %cdsID)
-    )   
+
+    time.sleep(5)
+    positions=driver.find_element_by_xpath("//span[@id='%s']" %cdsID).text
     
-    positions=driver.find_element_by_xpath("//span[contains(text(),'..')]/following-sibling::span/following-sibling::span").text
-    #positions=driver.find_element_by_xpath("//span[contains(@id,'%s')]/following-sibling::span/following-sibling::span" %cdsID).text
-    
-    print("positions : "+positions)
+    print(positions)
     motif = re.compile(r'((\d+)\.\.(\d+))', re.IGNORECASE)
-    res = motif.findall(positions)
-#    print("res : "+res)
-    debut=res[0][1]
-    fin=res[0][2]    
+    res = motif.search(positions)
+    res = res.group(0)
+    print("res : "+res)
+    debutmotif = re.compile(r'(([0-9]+)(?=.))')
+    finmotif = re.compile(r'((?<=..)[0-9]+)')
+    debut= debutmotif.search(res)
+    fin= finmotif.search(res)
+    debut= debut.group(0)
+    fin= fin.group(0)
+    print(debut)
+    print(fin)
     dropdown = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.ID, "EntrezSystem2.PEntrez.Nuccore.Sequence_ResultsPanel.Sequence_SingleItemSupl.Sequence_ViewerGenbankSidePanel.Sequence_ViewerChangeRegion.Shutter"))
     )
@@ -258,7 +261,6 @@ def rechSgRNAGeneId(espece,gene, driver):
     CDS = findCDS(gene_id, driver)
     CDSmoit = moitieCDS(CDS, driver)
     findSGRNA(CDSmoit, driver)
-    return(CDS)
     
 def rechBoitPromSeq(espece,seq, driver):
     gene_id = searchByNameId(espece,seq, driver)
@@ -358,3 +360,4 @@ def isTextsNotEmpty(*args):
         if not arg:
             result=False
     return result
+    
