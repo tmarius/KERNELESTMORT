@@ -11,11 +11,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
-from os import chdir,getcwd,remove 
+from os import chdir,getcwd 
 import time
 import re
 import json
-from pathlib import Path
+
 
 #####################################################FIND GENE ID#########################"
 
@@ -70,28 +70,14 @@ def searchBySeq(espece, seq, driver):
             time.sleep(60)
             driver.switch_to_window(driver.window_handles[1])
             chaine_id = driver.find_element_by_xpath("//p[contains(@class,'itemid')]").text
-            #chaine_id = driver.find_elements_by_xpath("//*[@id='ui-ncbiexternallink-10']").text
-            #chaine_id = driver.current_url
-#            regle = re.compile(r'((?<=/)(([A-Z][0-9])+)(?=.))')
-#            print(regle)
-#            res=regle.search(chaine_id)
-#            print(res)
-#            res = res.group(0)
-
-            
             break
         except IndexError:
             i=i+1
             print(i)
-            
-    chaine_id = driver.current_url
-    regle = re.compile(r'((?<=nucleotide/)(\w+)(?=.))')
-    gene_id = regle.search(chaine_id)
+
+    motif = re.compile(r'(?<=GenBank: )([A-Za-z]|[0-9])+')
+    gene_id = motif.search(chaine_id)
     gene_id = gene_id.group(0)
-#    motif = re.compile(r'(?<=GenBank: )([A-Za-z]|[0-9])+')
-#    gene_id = motif.search(chaine_id)
-#    gene_id = gene_id.group(0)
-            
     return (gene_id)
 
 
@@ -104,43 +90,45 @@ def findCDS(gene_id, driver):
     query.send_keys(gene_id)
     query.send_keys(Keys.RETURN)
     WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, "//*[@id='proteinTblId']/tbody//td[contains(text(), 'mRNA')]/following-sibling::td"))
+            EC.presence_of_element_located((By.XPATH, "//*[@id='padded_content']/div[6]/div[2]/div[8]/div/div/div[1]/div/ol/li/p[1]/a[1]"))
     )
     #Recupere le premier mRNA car souvent le bon, a verifié => Sinon faire comme au dessus et demander selection
-    mrna = driver.find_element_by_xpath("//*[@id='proteinTblId']/tbody//td[contains(text(), 'mRNA')]/following-sibling::td").text
-    mrna = driver.find_element_by_xpath("//*[@id='proteinTblId']/tbody//td[contains(text(), 'mRNA')]/following-sibling::td/a").click()
+    driver.find_element_by_xpath("//*[@id='padded_content']/div[6]/div[2]/div[8]/div/div/div[1]/div/ol/li/p[1]/a[1]").click()
+
+    
+#    mrna = driver.find_element_by_xpath("//*[@id='proteinTblId']/tbody//td[contains(text(), 'mRNA')]/following-sibling::td").text
+#    mrna = driver.find_element_by_xpath("//*[@id='proteinTblId']/tbody//td[contains(text(), 'mRNA')]/following-sibling::td/a").click()
     #PARTIE 1
     #Permet de récupérer les positions de début et fin du CDS
     #On a par exemple CDS 55..1870 , on veut que begin=55 et end=1870
-    driver.get("https://www.ncbi.nlm.nih.gov/nuccore/66016960")
+#    driver.get("https://www.ncbi.nlm.nih.gov/nuccore/66016960")
     genbankID=driver.find_element_by_xpath("//p[contains(@class,'itemid')]").text
-    #print(genbankID)
     
-    motif = re.compile(r'(?<=GenBank: )([A-Za-z]|[0-9]|.)+')
+    motif = re.compile(r'(?<=NCBI Reference Sequence: )([A-Za-z]|[0-9]|.|_)+')
     geneID = motif.search(genbankID)
     geneID = geneID.group(0)
-    #print (geneID)
     cdsID="feature_"+geneID+"_CDS_0"
-    #print(cdsID)
     
     
-
-    time.sleep(5)
-    positions=driver.find_element_by_xpath("//span[@id='%s']" %cdsID).text
+#    WebDriverWait(driver, 30).until(
+#            EC.presence_of_element_located((By.XPATH, "//span[@id='%s']" %cdsID))
+#    )
+    time.sleep(15)
+    positions = driver.find_element_by_xpath("//span[@id='%s']" %cdsID).text
     
-    #print(positions)
     motif = re.compile(r'((\d+)\.\.(\d+))', re.IGNORECASE)
     res = motif.search(positions)
     res = res.group(0)
+    print(res)
     #print("res : "+res)
     debutmotif = re.compile(r'(([0-9]+)(?=.))')
     finmotif = re.compile(r'((?<=..)[0-9]+)')
     debut= debutmotif.search(res)
     fin= finmotif.search(res)
     debut= debut.group(0)
+    print(debut)
     fin= fin.group(0)
-    #print(debut)
-    #print(fin)  
+    print(fin)
     dropdown = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.ID, "EntrezSystem2.PEntrez.Nuccore.Sequence_ResultsPanel.Sequence_SingleItemSupl.Sequence_ViewerGenbankSidePanel.Sequence_ViewerChangeRegion.Shutter"))
     )
@@ -236,13 +224,16 @@ def sequencePromotrice(gene_id, CDS, driver):
     seq = driver.find_element_by_xpath("//*[@id='seq-panel_0-body']/table/tbody/tr/td[2]/div").text 
     regle = re.compile(r'[\n]')
     fasta = regle.sub("",seq)
+    print(fasta)
     #CDS : enlever le début representant les info FASTA et les retour a la ligne
     regle = re.compile(r'[\n]')
     CDS = regle.sub("",CDS)
     motifCDS = re.compile(r'(ATG[ACTG]+)')
     CDS = motifCDS.search(CDS)
     CDS = CDS.group(0)
-    CDS = CDS[0:10]
+    CDS = CDS[0:8]
+    print("//////////////////////////////////////////////////")
+    print(CDS)
     #recupérer les séquences promotrices
     motifPromot = re.compile(r'(([ATGC]+)(?='+CDS+'))')
     res = motifPromot.search(fasta)
@@ -297,14 +288,6 @@ def findSGRNA(seq, driver):
     path = getcwd(); 
     path = path + '\\tmp' ;
     print (path);
-    
-    
-
-    path2 = getcwd();
-    path2 = path2 + '\\tmp' ;
-    my_file = Path(path2+'\CRISPRdirect.json')
-    if my_file.is_file():
-        remove(path2+'\CRISPRdirect.json')
     
     chrome_options = webdriver.ChromeOptions()
     prefs = {'download.default_directory' : path }
@@ -374,6 +357,7 @@ def findSGRNA(seq, driver):
 
 
 
+
 #Si au moins une chaine de caractère passée est vide, retourne false. Sinon, retourne true
 def isTextsNotEmpty(*args):
     result=True
@@ -381,14 +365,3 @@ def isTextsNotEmpty(*args):
         if not arg:
             result=False
     return result
-
-
-
-
-#URL = 'https://www.ncbi.nlm.nih.gov/nucleotide/HQ323264.1?report=genbank&log$=nuclalign&blast_rank=2&RID=TJ8TKU0M015'
-#regle = re.compile(r'((?<=nucleotide/)(\w+)(?=.))')
-#geneID = regle.search(URL)
-#print (geneID)
-#geneID = geneID.group(0)
-#print (geneID)
-

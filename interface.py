@@ -87,8 +87,8 @@ class Ui_Dialog(object):
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.textEdit.setPlaceholderText(_translate("Dialog", "Entrer la séquence partielle ..."))
-        self.comboBox.setItemText(0, _translate("Dialog", "Arabidopsis Taliana"))
-        self.comboBox.setItemText(1, _translate("Dialog", "Vitis Vinifera"))
+        self.comboBox.setItemText(0, _translate("Dialog", "Arabidopsis thaliana"))
+        self.comboBox.setItemText(1, _translate("Dialog", "Vitis vinifera"))
         self.lineEdit.setPlaceholderText(_translate("Dialog", "Nom/ID NCBI du gène"))
         self.lineEdit_4.setPlaceholderText(_translate("Dialog", "5\' => 3\'"))
         self.lineEdit_3.setPlaceholderText(_translate("Dialog", "5\' => 3\' comp"))
@@ -139,16 +139,12 @@ class Ui_Dialog(object):
         
         #Si le bouton radio est boite de régulation
         else:    
-            if(docFinal.isTextsNotEmpty(speciesName, nameID, sens, antisens)):
+            if(docFinal.isTextsNotEmpty(speciesName, nameID)):
                 print("On fait les manip nécessaires pour la boîte de régulation")
                 docFinal.rechBoitPromGeneId(speciesName, nameID, driver)
-                sgrna = crisprPrototype1.RetrouveBestSgrna(sens,antisens)
-                toExcel.createExcel(speciesName, nameID, sgrna)
                 
-            elif docFinal.isTextsNotEmpty(speciesName, partialSeq, sens, antisens):
+            elif docFinal.isTextsNotEmpty(speciesName, partialSeq):
                 docFinal.rechBoitPromSeq(speciesName, partialSeq, driver)
-                sgrna = crisprPrototype1.RetrouveBestSgrna(sens,antisens)
-                toExcel.createExcel(speciesName, nameID, sgrna)
                 
             else:
                 print("ERREUR - Pour la boîte de régulation, veuillez entrer une espèce, un id et une séquence")

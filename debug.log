@@ -1,0 +1,10 @@
+[0912/150027.386:ERROR:process_reader_win.cc(123)] NtOpenThread: {Accès refusé} Un processus a demandé l’accès a un objet, mais il ne bénéficie pas des autorisations nécessaires. (0xc0000022)
+[0912/150027.388:ERROR:exception_snapshot_win.cc(88)] thread ID 15988 not found in process
+[0912/170719.851:ERROR:process_reader_win.cc(123)] NtOpenThread: {Accès refusé} Un processus a demandé l’accès a un objet, mais il ne bénéficie pas des autorisations nécessaires. (0xc0000022)
+[0912/170719.851:ERROR:exception_snapshot_win.cc(88)] thread ID 18328 not found in process
+[0912/171115.659:ERROR:process_reader_win.cc(123)] NtOpenThread: {Accès refusé} Un processus a demandé l’accès a un objet, mais il ne bénéficie pas des autorisations nécessaires. (0xc0000022)
+[0912/171115.660:ERROR:exception_snapshot_win.cc(88)] thread ID 804 not found in process
+[0912/171454.960:ERROR:process_reader_win.cc(123)] NtOpenThread: {Accès refusé} Un processus a demandé l’accès a un objet, mais il ne bénéficie pas des autorisations nécessaires. (0xc0000022)
+[0912/171454.961:ERROR:exception_snapshot_win.cc(88)] thread ID 18744 not found in process
+[0912/171939.547:ERROR:process_reader_win.cc(123)] NtOpenThread: {Accès refusé} Un processus a demandé l’accès a un objet, mais il ne bénéficie pas des autorisations nécessaires. (0xc0000022)
+[0912/171939.548:ERROR:exception_snapshot_win.cc(88)] thread ID 16332 not found in process
