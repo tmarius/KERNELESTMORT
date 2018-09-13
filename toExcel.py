@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep 12 14:04:50 2018
+
+@author: ivan
+"""
+
 import xlrd
 from xlwt import Workbook
 
@@ -69,6 +76,3 @@ def createExcel (espece, gene, meilleur,CDS):
 
 #hit_20mer,tm,hit_12mer,meilleur = 'NOPE'
 #createExcel(espece, gene, liste, hit_20mer, tm, hit_12mer,test)
-
-
-
