@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep 12 14:01:45 2018
+
+@author: ivan
+"""
+
 import time
 import json
 from os import chdir,getcwd,remove 

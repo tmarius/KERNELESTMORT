@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'InterfaceCoutos.ui'
@@ -194,5 +195,3 @@ if __name__ == "__main__":
     
     
     
-       
-# LOC100232985
