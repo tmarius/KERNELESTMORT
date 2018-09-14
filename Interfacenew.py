@@ -103,7 +103,7 @@ class Ui_Dialog(object):
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:7.8pt;\"><br /></p></body></html>"))
         self.textEdit.setPlaceholderText(_translate("Dialog", "Entrer la séquence partielle ..."))
-        self.comboBox.setItemText(0, _translate("Dialog", "Arabidopsis Taliana"))
+        self.comboBox.setItemText(0, _translate("Dialog", "Arabidopsis Thaliana"))
         self.comboBox.setItemText(1, _translate("Dialog", "Vitis Vinifera"))
         self.label_3.setText(_translate("Dialog", "Gène :"))
         self.lineEdit.setPlaceholderText(_translate("Dialog", "Nom/ID NCBI du gène"))
@@ -144,8 +144,6 @@ class Ui_Dialog(object):
                 CDS = docFinal.rechSgRNAGeneId(speciesName,nameID, driver)
                 sgrna = crisprPrototype1.RetrouveBestSgrna(sens,antisens)
                 toExcel.createExcel(speciesName, nameID, sgrna,CDS)
-                
-                
                 
             
             elif docFinal.isTextsNotEmpty(speciesName, partialSeq, sens, antisens):

@@ -89,11 +89,16 @@ def findCDS(gene_id, driver):
     query = driver.find_element_by_id("term")
     query.send_keys(gene_id)
     query.send_keys(Keys.RETURN)
-    WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, "//*[@id='padded_content']/div[6]/div[2]/div[8]/div/div/div[1]/div/ol/li/p[1]/a[1]"))
+    
+#    print (driver.find_element_by_xpath("//h4[contains(text(),'mRNA')]/ol/li/p[1]/a[1]").text)
+    
+#    mRNA and Protein(s)
+    
+    WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//*[contains(@class,'genomerefseqs_slave ui-ncbitoggler ui-ncbitoggler-slave-open')]/ol/li/p[1]/a[1]"))
     )
     #Recupere le premier mRNA car souvent le bon, a verifié => Sinon faire comme au dessus et demander selection
-    driver.find_element_by_xpath("//*[@id='padded_content']/div[6]/div[2]/div[8]/div/div/div[1]/div/ol/li/p[1]/a[1]").click()
+    driver.find_element_by_xpath("//*[contains(@class,'genomerefseqs_slave ui-ncbitoggler ui-ncbitoggler-slave-open')]/ol/li/p[1]/a[1]").click()
 
     
 #    mrna = driver.find_element_by_xpath("//*[@id='proteinTblId']/tbody//td[contains(text(), 'mRNA')]/following-sibling::td").text
@@ -268,7 +273,7 @@ def rechSgRNAGeneId(espece,gene, driver):
     return(CDS)
     
 def rechBoitPromSeq(espece,seq, driver):
-    gene_id = searchByNameId(espece,seq, driver)
+    gene_id = searchBySeq(espece,seq, driver)
     CDS = findCDS(gene_id, driver)
     CDSmoit = moitieCDS(CDS, driver)
     seqProm = sequencePromotrice(gene_id,CDSmoit, driver)
